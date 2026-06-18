@@ -54,6 +54,7 @@ async def test_pubmed_search_maps_efetch_records() -> None:
     assert len(articles) == 1
     assert articles[0].title == "Community health worker retention"
     assert articles[0].author == "Bello F; Okeke A"
+    assert articles[0].source_url == "https://pubmed.ncbi.nlm.nih.gov/123/"
     assert articles[0].doi == "10.1186/example"
     assert articles[0].year == "2024"
     assert articles[0].source == "PubMed"
@@ -114,6 +115,7 @@ async def test_scopus_search_maps_records(monkeypatch: pytest.MonkeyPatch) -> No
                                 "prism:publicationName": "BMC Psychiatry",
                                 "dc:description": "A study abstract.",
                                 "prism:doi": "10.1186/scopus",
+                                "link": [{"@ref": "scopus", "@href": "https://www.scopus.com/record/display.uri?eid=2-s2.0-abc"}],
                             }
                         ],
                     }
@@ -126,6 +128,7 @@ async def test_scopus_search_maps_records(monkeypatch: pytest.MonkeyPatch) -> No
     assert len(articles) == 1
     assert articles[0].title == "School screening models"
     assert articles[0].author == "Eze N"
+    assert articles[0].source_url == "https://www.scopus.com/record/display.uri?eid=2-s2.0-abc"
     assert articles[0].journal == "BMC Psychiatry"
     assert articles[0].doi == "10.1186/scopus"
 

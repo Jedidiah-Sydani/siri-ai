@@ -91,11 +91,13 @@ def pubmed_article_from_xml(element: ElementTree.Element, source_name: str) -> A
             break
 
     key = doi or pmid or title
+    source_url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else ""
     return Article(
         id=article_id("pubmed", key),
         source=source_name,
         title=title or "Untitled PubMed record",
         author=pubmed_authors_from_xml(element),
+        sourceUrl=source_url,
         doi=doi,
         year=year,
         journal=journal,
@@ -155,6 +157,12 @@ def scopus_article_from_payload(payload: dict, source_name: str) -> Article:
     doi = payload.get("prism:doi") or ""
     title = payload.get("dc:title") or "Untitled Scopus record"
     author = payload.get("dc:creator") or payload.get("authname") or ""
+    links = payload.get("link") or []
+    source_url = ""
+    for link in links:
+        if link.get("@ref") in {"scopus", "self"} and link.get("@href"):
+            source_url = link["@href"]
+            break
     key = doi or payload.get("dc:identifier") or payload.get("eid") or title
 
     return Article(
@@ -162,6 +170,7 @@ def scopus_article_from_payload(payload: dict, source_name: str) -> Article:
         source=source_name,
         title=title,
         author=author,
+        sourceUrl=source_url,
         doi=doi,
         year=publication_year(payload.get("prism:coverDate")),
         journal=payload.get("prism:publicationName") or "",
@@ -202,7 +211,7 @@ async def search_scopus(
                 "query": query,
                 "count": SCOPUS_PAGE_SIZE,
                 "start": start,
-                "field": "dc:identifier,eid,dc:title,dc:creator,authname,prism:doi,prism:coverDate,prism:publicationName,dc:description",
+                "field": "dc:identifier,eid,dc:title,dc:creator,authname,prism:doi,prism:coverDate,prism:publicationName,dc:description,link",
             },
         )
         response.raise_for_status()
@@ -237,6 +246,7 @@ def google_article_from_payload(payload: dict, source_name: str) -> Article:
         source=source_name,
         title=title,
         author=author,
+        sourceUrl=link,
         doi="",
         year=publication_year(snippet),
         journal="",

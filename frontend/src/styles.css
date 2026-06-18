@@ -153,6 +153,38 @@ th {
   background: #f7f9fb;
 }
 
+.table-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--navy);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+}
+
+.table-link:hover,
+.table-link:focus-visible {
+  color: var(--blue);
+  text-decoration-color: currentColor;
+}
+
+.table-link:focus-visible {
+  outline: 0;
+}
+
+.title-link {
+  color: var(--ink);
+}
+
+.muted-text {
+  color: var(--muted);
+}
+
 .home-shell {
   min-height: 100vh;
   display: grid;
@@ -668,6 +700,17 @@ th {
   justify-content: flex-end;
 }
 
+.selection-count {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--navy-dark);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+}
+
 /* Save sits in the second grid column, aligned to the bottom of the Owner row. */
 .idea-save-cell {
   align-self: end;
@@ -1084,6 +1127,25 @@ th {
   gap: 8px;
 }
 
+.secondary-action {
+  min-height: 34px;
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.secondary-action:hover {
+  border-color: var(--navy-dark);
+  background: var(--navy-dark);
+}
+
+.secondary-action:disabled:hover {
+  border-color: var(--navy);
+  background: var(--navy);
+}
+
 .fetch-button {
   min-height: 34px;
   border-color: var(--orange);
@@ -1106,6 +1168,36 @@ th {
 .source-results {
   display: grid;
   gap: 8px;
+}
+
+.selection-filters {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.selection-filters-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--navy-dark);
+}
+
+.selection-filters-title span {
+  color: var(--muted);
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.selection-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .metric-grid {
@@ -1154,6 +1246,19 @@ th {
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+.table-wrap table {
+  font-size: 12.5px;
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 8px 10px;
+}
+
+.table-wrap th {
+  font-size: 11.5px;
 }
 
 .muted-row {
@@ -1532,6 +1637,7 @@ th {
 
   .stage-rail,
   .form-grid,
+  .selection-filter-grid,
   .metric-grid,
   .metric-grid.compact {
     grid-template-columns: 1fr;

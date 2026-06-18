@@ -36,6 +36,7 @@ function makeArticle(overrides: Partial<Article> = {}): Article {
     doi: "10.1/x",
     title: "A",
     author: "Author A",
+    sourceUrl: "https://doi.org/10.1/x",
     year: "2024",
     fullTextStatus: "Not pulled",
     selected: false,

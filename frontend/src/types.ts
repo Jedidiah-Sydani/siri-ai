@@ -36,6 +36,7 @@ export interface Article {
   title: string;
   source: string;
   author: string;
+  sourceUrl: string;
   doi: string;
   year: string | number;
   journal?: string;

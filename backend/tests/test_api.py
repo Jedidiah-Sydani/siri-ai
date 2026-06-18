@@ -75,6 +75,7 @@ def test_search_route_returns_normalized_articles(monkeypatch) -> None:
                 source="PubMed",
                 title="Malaria uptake study",
                 author="Bello F",
+                sourceUrl="https://doi.org/10.1186/test",
                 doi="10.1186/test",
                 year="2024",
                 journal="BMC Health Services Research",

@@ -33,6 +33,7 @@ class Article(ApiModel):
     source: str
     title: str
     author: str
+    source_url: str = Field(alias="sourceUrl")
     doi: str
     year: str
     journal: str

@@ -10,6 +10,16 @@ interface SearchState {
   error: string | null;
 }
 
+function formatRunDateTime(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
   const [activeSourceId, setActiveSourceId] = useState(paper.sources[0]?.id || "pubmed");
   const [searchState, setSearchState] = useState<SearchState>({ status: "idle", error: null });
@@ -40,7 +50,7 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
 
     try {
       const response = await searchSource(activeSource);
-      const today = new Date().toISOString().slice(0, 10);
+      const runDateTime = formatRunDateTime(new Date());
 
       onUpdatePaper((current) => {
         const source =
@@ -54,7 +64,7 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
                 ...item,
                 enabled: true,
                 resultCount: response.articles.length,
-                lastRun: today,
+                lastRun: runDateTime,
               }
             : item,
         );
@@ -122,7 +132,7 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
             </div>
             <div className="source-actions">
               <button
-                className="icon-button"
+                className="secondary-action icon-button"
                 type="button"
                 onClick={runSearchTermGeneration}
                 disabled={generateState.status === "loading"}

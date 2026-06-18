@@ -6,6 +6,7 @@ interface RawArticle {
   title?: string;
   source?: string;
   author?: string;
+  sourceUrl?: string;
   doi?: string;
   year?: string | number;
   journal?: string;
@@ -41,6 +42,7 @@ const DEFAULT_ARTICLE: Article = {
   title: "",
   source: "",
   author: "",
+  sourceUrl: "",
   doi: "",
   year: "",
   selected: false,

@@ -6,8 +6,9 @@ from app.schemas import GenerateSearchTermRequest
 from app.services.openai_client import OpenAIChatClient, get_openai_chat_client
 
 
-
-def build_search_term_messages(request: GenerateSearchTermRequest) -> list[dict[str, str]]:
+def build_search_term_messages(
+    request: GenerateSearchTermRequest,
+) -> list[dict[str, str]]:
     return [
         {
             "role": "system",
@@ -36,11 +37,15 @@ def parse_search_term_response(content: str) -> str:
     try:
         payload = json.loads(content)
     except json.JSONDecodeError as exc:
-        raise HTTPException(status_code=502, detail="OpenAI returned invalid search term JSON.") from exc
+        raise HTTPException(
+            status_code=502, detail="OpenAI returned invalid search term JSON."
+        ) from exc
 
     search_term = payload.get("searchTerm")
     if not isinstance(search_term, str) or not search_term.strip():
-        raise HTTPException(status_code=502, detail="OpenAI did not return a search term.")
+        raise HTTPException(
+            status_code=502, detail="OpenAI did not return a search term."
+        )
 
     return search_term.strip()
 

@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   deselectAllArticles,
+  deselectArticlesById,
+  filterArticles,
   markDuplicates,
+  selectArticlesById,
   pullArticleDetails,
   selectAllArticles,
   selectUniqueArticles,
@@ -16,6 +19,7 @@ function makeArticle(overrides: Partial<Article> = {}): Article {
     doi: "10.1/x",
     title: "A",
     author: "Author A",
+    sourceUrl: "https://doi.org/10.1/x",
     year: "2024",
     abstract: "",
     fullTextStatus: "Not pulled",
@@ -59,6 +63,94 @@ describe("deselectAllArticles", () => {
   it("deselects every record", () => {
     const result = deselectAllArticles([makeArticle({ selected: true }), makeArticle({ selected: true })]);
     expect(result.every((a) => !a.selected)).toBe(true);
+  });
+});
+
+describe("selectArticlesById and deselectArticlesById", () => {
+  it("only changes records in the target set", () => {
+    const selected = selectArticlesById(
+      [makeArticle({ id: "1" }), makeArticle({ id: "2" })],
+      new Set(["2"]),
+    );
+    expect(selected.map((article) => article.selected)).toEqual([false, true]);
+
+    const deselected = deselectArticlesById(
+      [makeArticle({ id: "1", selected: true }), makeArticle({ id: "2", selected: true })],
+      new Set(["2"]),
+    );
+    expect(deselected.map((article) => article.selected)).toEqual([true, false]);
+  });
+});
+
+describe("filterArticles", () => {
+  it("combines full text, year, include keywords, and exclude keywords with AND logic", () => {
+    const articles = [
+      makeArticle({
+        id: "1",
+        title: "Malaria prevention uptake",
+        author: "Amina Bello",
+        year: "2025",
+        abstract: "Caregiver adherence in Nigeria",
+        fullTextStatus: "Pulled",
+      }),
+      makeArticle({
+        id: "2",
+        title: "Malaria prevention uptake",
+        author: "Amina Bello",
+        year: "2018",
+        abstract: "Caregiver adherence in Nigeria",
+        fullTextStatus: "Pulled",
+      }),
+      makeArticle({
+        id: "3",
+        title: "Malaria prevention uptake protocol",
+        author: "Amina Bello",
+        year: "2025",
+        abstract: "Caregiver adherence in Nigeria",
+        fullTextStatus: "Pulled",
+      }),
+      makeArticle({
+        id: "4",
+        title: "Malaria prevention uptake",
+        author: "Amina Bello",
+        year: "2025",
+        abstract: "Caregiver adherence in Nigeria",
+        fullTextStatus: "Not pulled",
+      }),
+    ];
+
+    const result = filterArticles(
+      articles,
+      {
+        recordType: "all",
+        fullText: "pulled",
+        yearWindow: "5",
+        includeKeywords: "malaria, Nigeria",
+        excludeKeywords: "protocol",
+      },
+      2026,
+    );
+
+    expect(result.map((article) => article.id)).toEqual(["1"]);
+  });
+
+  it("can filter down to unique records only", () => {
+    const result = filterArticles(
+      [
+        makeArticle({ id: "1", doi: "10.1/same" }),
+        makeArticle({ id: "2", doi: "10.1/same" }),
+        makeArticle({ id: "3", doi: "10.1/other" }),
+      ],
+      {
+        recordType: "unique",
+        fullText: "any",
+        yearWindow: "any",
+        includeKeywords: "",
+        excludeKeywords: "",
+      },
+    );
+
+    expect(result.map((article) => article.id)).toEqual(["1", "3"]);
   });
 });
 
