@@ -6,6 +6,7 @@ from app.schemas import GenerateSearchTermRequest
 from app.services.openai_client import OpenAIChatClient, get_openai_chat_client
 
 
+
 def build_search_term_messages(request: GenerateSearchTermRequest) -> list[dict[str, str]]:
     return [
         {
