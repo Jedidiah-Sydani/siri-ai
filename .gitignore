@@ -1,0 +1,42 @@
+.DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node / Vite
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+frontend/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+coverage/
+frontend/coverage/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+.coverage
+htmlcov/
+.venv/
+backend/.venv/
+*.egg-info/
+backend/*.egg-info/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo

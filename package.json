@@ -1,0 +1,20 @@
+{
+  "name": "siri-research-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev:web",
+    "dev:web": "npm run dev --workspace @siri/web",
+    "dev:api": "backend/.venv/bin/python -m uvicorn app.main:app --app-dir backend --reload --reload-dir backend",
+    "build": "npm run build --workspace @siri/web",
+    "preview": "npm run preview --workspace @siri/web",
+    "lint": "npm run lint --workspace @siri/web",
+    "typecheck": "npm run typecheck --workspace @siri/web",
+    "test": "npm run test:web && npm run test:api",
+    "test:web": "npm run test --workspace @siri/web",
+    "test:api": "backend/.venv/bin/python -m pytest backend/tests"
+  }
+}
