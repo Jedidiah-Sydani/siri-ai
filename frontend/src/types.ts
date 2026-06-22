@@ -8,6 +8,8 @@ export type ReviewDecision = "Unreviewed" | "Included" | "Maybe" | "Excluded";
 export type FullTextStatus = "Not pulled" | "Pulled";
 export type ProjectStatus = "Ideation" | "In progress" | "Complete" | "Archived";
 export type RequestStatus = "idle" | "loading" | "ready" | "error";
+export type FrameworkId = "PCC" | "PICO" | "PEO" | "SPIDER";
+export type FrameworkFields = Partial<Record<"population" | "concept" | "context" | "intervention" | "comparison" | "outcome" | "exposure" | "sample" | "phenomenon" | "design" | "evaluation" | "researchType", string>>;
 
 export interface User {
   id: string;
@@ -57,7 +59,8 @@ export interface Project {
   title: string;
   theme: string;
   researchLead: string;
-  framework: string;
+  framework: FrameworkId;
+  frameworkFields: FrameworkFields;
   geography: string;
   updatedAt: string;
   researchQuestion: string;
@@ -73,7 +76,7 @@ export interface ProjectSummary {
   title: string;
   theme: string;
   researchLead: string;
-  framework: string;
+  framework: FrameworkId;
   geography: string;
   updatedAt: string;
   stageId: StageId;

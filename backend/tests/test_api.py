@@ -64,7 +64,12 @@ def test_project_detail() -> None:
     project = response.json()
     assert project["title"] == "School-based adolescent mental health screening models"
     assert project["researchLead"] == "Ngozi Eze"
-    assert project["framework"] == "SPIDER"
+    assert project["framework"] == "PCC"
+    assert project["frameworkFields"] == {
+        "population": "Adolescents in school settings",
+        "concept": "School-based mental health screening models",
+        "context": "West African education and health systems",
+    }
     assert project["articles"] == []
     assert project["sources"][0]["searchTerm"]
 
@@ -135,6 +140,12 @@ def test_generate_search_term_route(monkeypatch) -> None:
             "title": "SMC uptake",
             "theme": "Malaria",
             "framework": "PICO",
+            "frameworkFields": {
+                "population": "Children eligible for SMC",
+                "intervention": "SMC delivery",
+                "comparison": "Standard delivery",
+                "outcome": "Uptake",
+            },
             "geography": "Nigeria",
             "researchQuestion": "What affects uptake?",
         },

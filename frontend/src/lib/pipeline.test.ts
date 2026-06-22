@@ -19,6 +19,12 @@ function makePaper(overrides: Partial<Project> = {}): Project {
     theme: "Theme",
     researchLead: "Research Lead",
     framework: "PICO",
+    frameworkFields: {
+      population: "Children",
+      intervention: "SMC",
+      comparison: "Standard care",
+      outcome: "Uptake",
+    },
     geography: "Geography",
     updatedAt: "Just now",
     researchQuestion: "Question",
@@ -160,10 +166,10 @@ describe("getAllSearchTerms", () => {
 });
 
 describe("isStageComplete", () => {
-  it("ideation requires title, framework and question", () => {
+  it("ideation requires title, question and active framework fields", () => {
     expect(isStageComplete(makePaper(), "idea")).toBe(true);
     expect(isStageComplete(makePaper({ researchQuestion: "" }), "idea")).toBe(false);
-    expect(isStageComplete(makePaper({ framework: "" }), "idea")).toBe(false);
+    expect(isStageComplete(makePaper({ frameworkFields: { population: "Children" } }), "idea")).toBe(false);
   });
 
   it("dedupe is complete once any record is selected", () => {

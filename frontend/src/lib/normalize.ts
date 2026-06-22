@@ -1,5 +1,5 @@
-import { defaultSources } from "../data/constants";
-import type { Article, Collaborator, FullTextStatus, Project, ResearchSource, ReviewDecision } from "../types";
+import { defaultSources, isFrameworkId } from "../data/constants";
+import type { Article, Collaborator, FrameworkFields, FullTextStatus, Project, ResearchSource, ReviewDecision } from "../types";
 
 interface RawArticle {
   id?: string;
@@ -27,6 +27,7 @@ interface RawProject {
   theme?: string;
   researchLead?: string;
   framework?: string;
+  frameworkFields?: FrameworkFields;
   geography?: string;
   updatedAt?: string;
   researchQuestion?: string;
@@ -72,6 +73,16 @@ function normalizeArticle(article: RawArticle): Article {
   return { ...DEFAULT_ARTICLE, ...rest, selected, reviewDecision, fullTextStatus };
 }
 
+function normalizeFrameworkFields(value: unknown): FrameworkFields {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([, fieldValue]) => typeof fieldValue === "string")
+      .map(([key, fieldValue]) => [key, fieldValue.trim()]),
+  ) as FrameworkFields;
+}
+
 export function normalizePaper(paper: RawProject): Project {
   const { archived, ...rest } = paper;
   const existingSources = Array.isArray(paper.sources) ? paper.sources : [];
@@ -92,7 +103,8 @@ export function normalizePaper(paper: RawProject): Project {
     title: rest.title || "",
     theme: rest.theme || "",
     researchLead: rest.researchLead || "",
-    framework: rest.framework || "PICO",
+    framework: isFrameworkId(rest.framework) ? rest.framework : "PICO",
+    frameworkFields: normalizeFrameworkFields(rest.frameworkFields),
     geography: rest.geography || "",
     updatedAt: rest.updatedAt || "",
     researchQuestion: rest.researchQuestion || "",

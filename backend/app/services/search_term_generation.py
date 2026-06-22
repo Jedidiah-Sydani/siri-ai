@@ -9,6 +9,9 @@ from app.services.openai_client import OpenAIChatClient, get_openai_chat_client
 def build_search_term_messages(
     request: GenerateSearchTermRequest,
 ) -> list[dict[str, str]]:
+    framework_fields = "\n".join(
+        f"- {key}: {value}" for key, value in request.framework_fields.items() if value.strip()
+    )
     return [
         {
             "role": "system",
@@ -23,11 +26,12 @@ def build_search_term_messages(
             "role": "user",
             "content": (
                 f"Source: {request.source_name}\n"
-                f"Research question: {request.research_question}"
+                f"Research question: {request.research_question}\n"
                 f"Working title: {request.title}\n"
                 f"Theme: {request.theme}\n"
                 f"Geography: {request.geography}\n"
                 f"Framework: {request.framework}\n"
+                f"Framework fields:\n{framework_fields or '- none'}\n"
             ),
         },
     ]

@@ -134,7 +134,7 @@ export async function searchSource(
 }
 
 export async function generateSearchTerm(
-  project: Pick<Project, "title" | "theme" | "framework" | "geography" | "researchQuestion">,
+  project: Pick<Project, "title" | "theme" | "framework" | "frameworkFields" | "geography" | "researchQuestion">,
   source: Pick<ResearchSource, "id" | "name">,
   signal?: AbortSignal,
 ): Promise<GenerateSearchTermResponse> {
@@ -148,6 +148,7 @@ export async function generateSearchTerm(
       title: project.title,
       theme: project.theme,
       framework: project.framework,
+      frameworkFields: project.frameworkFields,
       geography: project.geography,
       researchQuestion: project.researchQuestion,
     }),

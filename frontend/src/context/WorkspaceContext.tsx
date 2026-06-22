@@ -1,10 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { defaultSources } from "../data/constants";
+import { defaultSources, isFrameworkId } from "../data/constants";
 import { getProjectStatus, getStageInfo } from "../lib/pipeline";
 import { uid } from "../lib/utils";
 import { ApiError, loadProject, loadWorkspace } from "../services/workspaceApi";
 import type {
+  FrameworkFields,
   Project,
   ProjectSummary,
   ProjectUpdater,
@@ -31,6 +32,23 @@ interface WorkspaceProviderProps {
 function getFormString(formData: FormData, key: string): string {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
+}
+
+function getFrameworkFields(formData: FormData): FrameworkFields {
+  const rawFields = getFormString(formData, "frameworkFieldsJson");
+  if (!rawFields) return {};
+
+  try {
+    const parsed = JSON.parse(rawFields);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+    const fields: FrameworkFields = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      if (typeof value === "string") fields[key as keyof FrameworkFields] = value.trim();
+    }
+    return fields;
+  } catch {
+    return {};
+  }
 }
 
 export function WorkspaceProvider({ children, onAuthExpired }: WorkspaceProviderProps) {
@@ -97,7 +115,7 @@ export function WorkspaceProvider({ children, onAuthExpired }: WorkspaceProvider
       archived: Boolean(paper.archived),
       ...extra,
     };
-  }, [onAuthExpired]);
+  }, []);
 
   const fetchProject = useCallback(async (paperId: string, signal?: AbortSignal) => {
     const localProject = projectDetailsRef.current[paperId];
@@ -124,7 +142,7 @@ export function WorkspaceProvider({ children, onAuthExpired }: WorkspaceProvider
       },
     }));
     return project;
-  }, []);
+  }, [onAuthExpired]);
 
   const updatePaper = useCallback((paperId: string, updater: ProjectUpdater) => {
     setWorkspace((current) => {
@@ -153,12 +171,14 @@ export function WorkspaceProvider({ children, onAuthExpired }: WorkspaceProvider
   // Returns the id of the created paper so callers can navigate to it.
   const createPaper = useCallback((formData: FormData) => {
     const id = uid("paper");
+    const framework = getFormString(formData, "framework");
     const paper = {
       id,
       title: getFormString(formData, "title"),
       theme: getFormString(formData, "theme"),
       researchLead: user?.name || "",
-      framework: getFormString(formData, "framework"),
+      framework: isFrameworkId(framework) ? framework : "PICO",
+      frameworkFields: getFrameworkFields(formData),
       geography: getFormString(formData, "geography"),
       updatedAt: "Just now",
       researchQuestion: getFormString(formData, "researchQuestion"),

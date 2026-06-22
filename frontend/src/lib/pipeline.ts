@@ -1,4 +1,4 @@
-import { stages, stageHomeLabels, projectStatus } from "../data/constants";
+import { getFrameworkDefinition, stages, stageHomeLabels, projectStatus } from "../data/constants";
 import type { Article, Project, ProjectFilter, ProjectStatus, StageId, StageInfo } from "../types";
 
 const REVIEW_DECISIONS = ["Included", "Maybe", "Excluded"];
@@ -57,7 +57,12 @@ export function getPaperStage(paper: Project): StageId {
 
 export function isStageComplete(paper: Project, stageId: StageId): boolean {
   if (stageId === "idea") {
-    return Boolean(paper.title && paper.researchQuestion && paper.framework);
+    const requiredFields = getFrameworkDefinition(paper.framework).fields;
+    return Boolean(
+      paper.title &&
+        paper.researchQuestion &&
+        requiredFields.every((field) => paper.frameworkFields[field.id]?.trim()),
+    );
   }
   if (stageId === "search") return paper.articles.length > 0;
   if (stageId === "dedupe") return paper.articles.some((article) => article.selected);

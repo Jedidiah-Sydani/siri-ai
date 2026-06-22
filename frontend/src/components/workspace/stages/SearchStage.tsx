@@ -142,7 +142,7 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
                 ) : (
                   <Sparkles size={17} />
                 )}
-                {generateState.status === "loading" ? "Generating" : "Generate search term"}
+                {generateState.status === "loading" ? "Generating..." : "Generate search term"}
               </button>
               <button
                 className="fetch-button icon-button"
@@ -155,7 +155,7 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
                 ) : (
                   <Search size={17} />
                 )}
-                {searchState.status === "loading" ? "Fetching" : "Fetch"}
+                {searchState.status === "loading" ? "Fetching..." : "Fetch"}
               </button>
             </div>
           </div>

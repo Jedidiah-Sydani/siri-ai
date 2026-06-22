@@ -73,7 +73,7 @@ export default function HomePage() {
           <h1>Research projects</h1>
         </div>
         <button className="primary new-project-button" type="button" onClick={() => setIsModalOpen(true)}>
-          <Plus size={24} />
+          <Plus size={18} />
           New project
         </button>
       </section>

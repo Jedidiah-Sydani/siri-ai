@@ -80,6 +80,12 @@ PROJECTS = [
         theme="Immunization / PHC",
         researchLead="Dr. Joy Aifuobhokhan",
         framework="PICO",
+        frameworkFields={
+            "population": "Community health workers in underserved LGAs",
+            "intervention": "Financial and non-financial retention incentives",
+            "comparison": "Standard supervision or no structured incentive package",
+            "outcome": "Retention, motivation, and continuity of service",
+        },
         geography="Northern Nigeria",
         updatedAt="Just now",
         researchQuestion=(
@@ -102,6 +108,11 @@ PROJECTS = [
         theme="Maternal health",
         researchLead="Dr. Tunde Bakare",
         framework="PEO",
+        frameworkFields={
+            "population": "Pregnant women requiring emergency obstetric referral",
+            "exposure": "Facility and system-level referral delays",
+            "outcome": "Maternal outcomes and care continuity",
+        },
         geography="Nigeria",
         updatedAt="5 hours ago",
         researchQuestion=(
@@ -120,6 +131,12 @@ PROJECTS = [
         theme="Malaria",
         researchLead="Dr. Joy Aifuobhokhan",
         framework="PICO",
+        frameworkFields={
+            "population": "Caregivers of children eligible for SMC",
+            "intervention": "Seasonal malaria chemoprevention delivery and communication strategies",
+            "comparison": "Standard delivery approaches",
+            "outcome": "SMC uptake and adherence",
+        },
         geography="Sahel region",
         updatedAt="Yesterday",
         researchQuestion=(
@@ -136,7 +153,12 @@ PROJECTS = [
         title="School-based adolescent mental health screening models",
         theme="Mental health",
         researchLead="Ngozi Eze",
-        framework="SPIDER",
+        framework="PCC",
+        frameworkFields={
+            "population": "Adolescents in school settings",
+            "concept": "School-based mental health screening models",
+            "context": "West African education and health systems",
+        },
         geography="West Africa",
         updatedAt="3 days ago",
         researchQuestion=(
@@ -158,6 +180,11 @@ PROJECTS = [
         theme="Digital health",
         researchLead="SIRI Research Team",
         framework="PEO",
+        frameworkFields={
+            "population": "PHC facility staff",
+            "exposure": "Multiple digital reporting tools",
+            "outcome": "Workload, reporting behavior, and data quality",
+        },
         geography="Nigeria",
         updatedAt="Last week",
         researchQuestion=(
@@ -173,6 +200,12 @@ PROJECTS = [
         theme="Health workforce",
         researchLead="Dr. Joy Aifuobhokhan",
         framework="PICO",
+        frameworkFields={
+            "population": "Community health supervisors",
+            "intervention": "Retention incentive models",
+            "comparison": "No incentive or standard management approaches",
+            "outcome": "Sustained engagement and retention",
+        },
         geography="Nigeria",
         updatedAt="2 weeks ago",
         researchQuestion=(

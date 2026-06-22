@@ -79,6 +79,7 @@ class GenerateSearchTermRequest(ApiModel):
     title: str
     theme: str
     framework: str
+    framework_fields: dict[str, str] = Field(alias="frameworkFields")
     geography: str
     research_question: str = Field(alias="researchQuestion")
 
@@ -95,6 +96,7 @@ class Project(ApiModel):
     theme: str
     research_lead: str = Field(alias="researchLead")
     framework: str
+    framework_fields: dict[str, str] = Field(alias="frameworkFields")
     geography: str
     updated_at: str = Field(alias="updatedAt")
     research_question: str = Field(alias="researchQuestion")

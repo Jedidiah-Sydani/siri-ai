@@ -28,6 +28,12 @@ def make_request() -> GenerateSearchTermRequest:
         title="Community health worker retention",
         theme="Health workforce",
         framework="PICO",
+        frameworkFields={
+            "population": "Community health workers",
+            "intervention": "Retention incentives",
+            "comparison": "No incentive package",
+            "outcome": "Retention",
+        },
         geography="Nigeria",
         researchQuestion="What factors influence retention?",
     )
@@ -40,6 +46,7 @@ def test_build_search_term_messages_include_project_context() -> None:
     assert "Boolean search string" in messages[0]["content"]
     assert "Community health worker retention" in messages[1]["content"]
     assert "What factors influence retention?" in messages[1]["content"]
+    assert "Retention incentives" in messages[1]["content"]
 
 
 def test_parse_search_term_response() -> None:
