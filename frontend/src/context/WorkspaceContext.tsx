@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { defaultSources } from "../data/constants";
 import { getProjectStatus, getStageInfo } from "../lib/pipeline";
 import { uid } from "../lib/utils";
-import { loadProject, loadWorkspace } from "../services/workspaceApi";
+import { ApiError, loadProject, loadWorkspace } from "../services/workspaceApi";
 import type {
   Project,
   ProjectSummary,
@@ -23,12 +23,17 @@ interface WorkspaceState {
   error: Error | null;
 }
 
+interface WorkspaceProviderProps {
+  children: ReactNode;
+  onAuthExpired: () => void;
+}
+
 function getFormString(formData: FormData, key: string): string {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
 }
 
-export function WorkspaceProvider({ children }: { children: ReactNode }) {
+export function WorkspaceProvider({ children, onAuthExpired }: WorkspaceProviderProps) {
   const [workspace, setWorkspace] = useState<WorkspaceState>({
     papers: [],
     projectDetails: {},
@@ -58,6 +63,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       })
       .catch((loadError: unknown) => {
         if (loadError instanceof DOMException && loadError.name === "AbortError") return;
+        if (loadError instanceof ApiError && loadError.status === 401) {
+          onAuthExpired();
+          return;
+        }
         const error = loadError instanceof Error ? loadError : new Error("The research API could not be reached.");
         setWorkspace((current) => ({
           ...current,
@@ -67,7 +76,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       });
 
     return () => controller.abort();
-  }, []);
+  }, [onAuthExpired]);
 
   const summarizePaper = useCallback((paper: Project, extra: Partial<ProjectSummary> = {}): ProjectSummary => {
     const stage = getStageInfo(paper);
@@ -88,13 +97,21 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       archived: Boolean(paper.archived),
       ...extra,
     };
-  }, []);
+  }, [onAuthExpired]);
 
   const fetchProject = useCallback(async (paperId: string, signal?: AbortSignal) => {
     const localProject = projectDetailsRef.current[paperId];
     if (localProject?.isLocal) return localProject;
 
-    const project = await loadProject(paperId, signal);
+    let project: Project;
+    try {
+      project = await loadProject(paperId, signal);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        onAuthExpired();
+      }
+      throw error;
+    }
     projectDetailsRef.current = {
       ...projectDetailsRef.current,
       [paperId]: project,
@@ -204,6 +221,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     fetchProject,
     createPaper,
     updatePaper,
+    logout: onAuthExpired,
   };
 
   return <WorkspaceContext.Provider value={value}>{children}</WorkspaceContext.Provider>;

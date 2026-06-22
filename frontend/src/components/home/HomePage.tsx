@@ -10,7 +10,7 @@ import ProjectRow from "./ProjectRow";
 import type { ProjectFilter } from "../../types";
 
 export default function HomePage() {
-  const { papers, user, createPaper } = useWorkspace();
+  const { papers, user, createPaper, logout } = useWorkspace();
   const navigate = useNavigate();
   const [filter, setFilter] = useState<ProjectFilter>("all");
   const [query, setQuery] = useState("");
@@ -65,7 +65,7 @@ export default function HomePage() {
 
   return (
     <main className="home-shell">
-      <AppHeader user={user} />
+      <AppHeader user={user} onLogout={logout} />
 
       <section className="home-heading">
         <div>

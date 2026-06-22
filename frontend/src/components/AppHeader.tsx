@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import type { User } from "../types";
 
-export default function AppHeader({ user, className = "" }: { user: User; className?: string }) {
+interface AppHeaderProps {
+  user: User;
+  className?: string;
+  onLogout: () => void;
+}
+
+export default function AppHeader({ user, className = "", onLogout }: AppHeaderProps) {
   return (
     <header className={`home-topbar ${className}`.trim()}>
       <Link className="siri-lockup logo-home-button" to="/">
@@ -10,7 +16,7 @@ export default function AppHeader({ user, className = "" }: { user: User; classN
         <strong>SIRI</strong>
         <span>Research Workspace</span>
       </Link>
-      <ProfileMenu user={user} />
+      <ProfileMenu user={user} onLogout={onLogout} />
     </header>
   );
 }

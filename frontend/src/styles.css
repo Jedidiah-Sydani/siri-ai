@@ -332,7 +332,7 @@ th {
   font-size: 13px;
 }
 
-.profile-logout {
+.profile-menu-action {
   width: 100%;
   min-height: 44px;
   display: flex;
@@ -340,15 +340,125 @@ th {
   gap: 9px;
   border: 0;
   background: #fff;
-  color: #a23b35;
+  color: var(--navy-dark);
   padding: 0 15px;
   font-size: 13px;
   font-weight: 700;
   text-align: left;
 }
 
-.profile-logout:hover {
-  background: #fff4f2;
+.profile-menu-action:hover {
+  background: #f3f7fb;
+}
+
+.profile-menu-action-danger {
+  color: #b42318;
+}
+
+.profile-menu-action-danger:hover {
+  background: #fff3f1;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #eef3f7;
+  padding: 24px;
+}
+
+.login-panel {
+  width: min(100%, 430px);
+  display: grid;
+  gap: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+
+.login-brand {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: end;
+  justify-content: center;
+  gap: 28px;
+  color: var(--navy-dark);
+  margin-bottom: 16px;
+}
+
+.login-brand img {
+  width: auto;
+  height: 58px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.login-brand div {
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.login-brand strong {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.login-brand span {
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.login-form h1 {
+  margin: 4px 0 0;
+  color: var(--navy-dark);
+  font-size: 28px;
+}
+
+.login-submit:disabled {
+  opacity: 1;
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: #fff;
+}
+
+.primary:disabled:has(.button-spinner),
+.secondary-action:disabled:has(.button-spinner),
+.fetch-button:disabled:has(.button-spinner) {
+  opacity: 1;
+}
+
+.button-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: workspace-spin 700ms linear infinite;
+}
+
+.success-message {
+  border: 1px solid #b8dec9;
+  border-radius: 8px;
+  background: #effaf4;
+  color: #17613a;
+  padding: 10px 12px;
+  font-weight: 700;
 }
 
 .home-heading {

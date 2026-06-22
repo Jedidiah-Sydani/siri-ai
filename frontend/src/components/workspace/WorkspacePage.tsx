@@ -17,7 +17,7 @@ interface ProjectRequestState {
 
 export default function WorkspacePage() {
   const { paperId, stageId } = useParams();
-  const { fetchProject, getPaper, updatePaper, user } = useWorkspace();
+  const { fetchProject, getPaper, logout, updatePaper, user } = useWorkspace();
   const navigate = useNavigate();
   const [requestState, setRequestState] = useState<ProjectRequestState>({
     paperId: undefined,
@@ -86,7 +86,7 @@ export default function WorkspacePage() {
   if (currentRequestState.status === "loading") {
     return (
       <div className="project-shell">
-        <AppHeader user={user} className="project-workspace-topbar" />
+        <AppHeader user={user} className="project-workspace-topbar" onLogout={logout} />
         <main className="workspace-status" aria-live="polite">
           <div className="loading-indicator" aria-hidden="true" />
           <p>Loading project...</p>
@@ -98,7 +98,7 @@ export default function WorkspacePage() {
   if (currentRequestState.status === "error" || !paper) {
     return (
       <div className="project-shell">
-        <AppHeader user={user} className="project-workspace-topbar" />
+        <AppHeader user={user} className="project-workspace-topbar" onLogout={logout} />
         <main className="workspace-status" role="alert">
           <h1>Unable to load this project</h1>
           <p>{currentRequestState.error?.message || "The project could not be found."}</p>
@@ -122,7 +122,7 @@ export default function WorkspacePage() {
 
   return (
     <div className="project-shell">
-      <AppHeader user={user} className="project-workspace-topbar" />
+      <AppHeader user={user} className="project-workspace-topbar" onLogout={logout} />
 
       <main className="project-main">
         <section className="project-hero">

@@ -1,10 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.schemas import GenerateSearchTermRequest, GenerateSearchTermResponse, SearchRequest, SearchResponse
 from app.services.literature_search import search_literature_source
+from app.services.auth import get_authenticated_user
 from app.services.search_term_generation import generate_source_search_term
 
-router = APIRouter(prefix="/search", tags=["search"])
+router = APIRouter(prefix="/search", tags=["search"], dependencies=[Depends(get_authenticated_user)])
 
 
 @router.post("", response_model=SearchResponse, response_model_by_alias=True)

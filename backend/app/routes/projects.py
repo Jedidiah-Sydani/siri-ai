@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.schemas import Project, ProjectSummary
 from app.seed_data import get_project, get_project_summaries
+from app.services.auth import get_authenticated_user
 
-router = APIRouter(prefix="/projects", tags=["projects"])
+router = APIRouter(prefix="/projects", tags=["projects"], dependencies=[Depends(get_authenticated_user)])
 
 
 @router.get("", response_model=list[ProjectSummary], response_model_by_alias=True)

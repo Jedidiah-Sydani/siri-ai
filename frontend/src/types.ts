@@ -16,6 +16,11 @@ export interface User {
   department: string;
 }
 
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
 export interface Collaborator {
   id: string;
   name: string;
@@ -109,6 +114,7 @@ export interface WorkspaceContextValue {
   fetchProject: (paperId: string, signal?: AbortSignal) => Promise<Project>;
   createPaper: (formData: FormData) => string;
   updatePaper: (paperId: string, updater: ProjectUpdater) => void;
+  logout: () => void;
 }
 
 export interface SearchResponse {

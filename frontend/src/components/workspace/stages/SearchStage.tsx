@@ -137,7 +137,11 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
                 onClick={runSearchTermGeneration}
                 disabled={generateState.status === "loading"}
               >
-                <Sparkles size={17} />
+                {generateState.status === "loading" ? (
+                  <span className="button-spinner" aria-hidden="true" />
+                ) : (
+                  <Sparkles size={17} />
+                )}
                 {generateState.status === "loading" ? "Generating" : "Generate search term"}
               </button>
               <button
@@ -146,7 +150,11 @@ export default function SearchStage({ paper, onUpdatePaper }: StageProps) {
                 onClick={runSearch}
                 disabled={!activeSource.searchTerm.trim() || searchState.status === "loading"}
               >
-                <Search size={17} />
+                {searchState.status === "loading" ? (
+                  <span className="button-spinner" aria-hidden="true" />
+                ) : (
+                  <Search size={17} />
+                )}
                 {searchState.status === "loading" ? "Fetching" : "Fetch"}
               </button>
             </div>
