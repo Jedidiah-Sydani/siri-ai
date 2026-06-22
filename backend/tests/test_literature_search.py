@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from app.services.literature_search import (
     search_google_custom_search,
     search_literature_source,
+    search_openalex,
     search_pubmed,
     search_scopus,
 )
@@ -156,6 +157,83 @@ async def test_google_search_requires_configuration(monkeypatch: pytest.MonkeyPa
 
     assert exc.value.status_code == 503
     assert "GOOGLE_CSE_API_KEY" in exc.value.detail
+
+
+@pytest.mark.anyio
+async def test_openalex_search_maps_records() -> None:
+    calls = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "meta": {"next_cursor": None},
+                "results": [
+                    {
+                        "id": "https://openalex.org/W123",
+                        "doi": "https://doi.org/10.1186/openalex",
+                        "title": "Community health worker motivation",
+                        "publication_year": 2024,
+                        "primary_location": {
+                            "landing_page_url": "https://example.org/article",
+                            "source": {"display_name": "African Health Sciences"},
+                        },
+                        "authorships": [
+                            {"author": {"display_name": "Bello F"}},
+                            {"raw_author_name": "Okeke A"},
+                        ],
+                        "abstract_inverted_index": {
+                            "This": [0],
+                            "is": [1],
+                            "an": [2],
+                            "abstract.": [3],
+                        },
+                    }
+                ],
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        articles = await search_openalex(client, "OpenAlex", "health workers")
+
+    assert calls[0].url.params["search"] == "health workers"
+    assert calls[0].url.params["cursor"] == "*"
+    assert len(articles) == 1
+    assert articles[0].title == "Community health worker motivation"
+    assert articles[0].author == "Bello F; Okeke A"
+    assert articles[0].source_url == "https://example.org/article"
+    assert articles[0].doi == "10.1186/openalex"
+    assert articles[0].year == "2024"
+    assert articles[0].journal == "African Health Sciences"
+    assert articles[0].abstract == "This is an abstract."
+
+
+@pytest.mark.anyio
+async def test_openalex_uses_record_url_when_landing_page_is_only_doi() -> None:
+    async with httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={
+                    "meta": {"next_cursor": None},
+                    "results": [
+                        {
+                            "id": "https://openalex.org/W456",
+                            "doi": "https://doi.org/10.1186/openalex",
+                            "title": "OpenAlex record",
+                            "primary_location": {
+                                "landing_page_url": "https://doi.org/10.1186/openalex",
+                            },
+                        }
+                    ],
+                },
+            )
+        )
+    ) as client:
+        articles = await search_openalex(client, "OpenAlex", "malaria")
+
+    assert articles[0].source_url == "https://openalex.org/W456"
 
 
 @pytest.mark.anyio

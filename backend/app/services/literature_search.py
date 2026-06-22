@@ -12,6 +12,7 @@ from app.schemas import Article
 NCBI_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 SCOPUS_SEARCH_URL = "https://api.elsevier.com/content/search/scopus"
 GOOGLE_CUSTOM_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
+OPENALEX_WORKS_URL = "https://api.openalex.org/works"
 DEFAULT_TIMEOUT = 20
 PUBMED_MAX_RECORDS = 10_000
 PUBMED_FETCH_BATCH_SIZE = 200
@@ -19,6 +20,7 @@ SCOPUS_PAGE_SIZE = 25
 SCOPUS_MAX_RECORDS = 5_000
 GOOGLE_PAGE_SIZE = 10
 GOOGLE_MAX_RECORDS = 100
+OPENALEX_PAGE_SIZE = 200
 
 
 def clean_search_term(search_term: str) -> str:
@@ -35,6 +37,12 @@ def publication_year(value: str | int | None) -> str:
         return ""
     match = re.search(r"(19|20)\d{2}", str(value))
     return match.group(0) if match else ""
+
+
+def clean_doi(value: str | None) -> str:
+    if not value:
+        return ""
+    return re.sub(r"^https?://doi\.org/", "", value.strip(), flags=re.IGNORECASE)
 
 
 def dedupe_articles(articles: list[Article]) -> list[Article]:
@@ -301,6 +309,99 @@ async def search_google_custom_search(
     return dedupe_articles(articles)
 
 
+def openalex_abstract_from_inverted_index(payload: dict) -> str:
+    inverted_index = payload.get("abstract_inverted_index") or {}
+    if not inverted_index:
+        return ""
+
+    words_by_position = {}
+    for word, positions in inverted_index.items():
+        for position in positions:
+            words_by_position[position] = word
+
+    return " ".join(words_by_position[position] for position in sorted(words_by_position))
+
+
+def openalex_authors_from_payload(payload: dict) -> str:
+    authors = []
+    for authorship in payload.get("authorships") or []:
+        author = authorship.get("author") or {}
+        name = authorship.get("raw_author_name") or author.get("display_name") or ""
+        if name:
+            authors.append(name)
+
+    return "; ".join(authors[:3])
+
+
+def openalex_source_url(payload: dict) -> str:
+    primary_location = payload.get("primary_location") or {}
+    landing_page_url = primary_location.get("landing_page_url") or ""
+    if landing_page_url and "doi.org/" not in landing_page_url.lower():
+        return landing_page_url
+
+    return payload.get("id") or ""
+
+
+def openalex_journal_from_payload(payload: dict) -> str:
+    primary_location = payload.get("primary_location") or {}
+    source = primary_location.get("source") or {}
+    return source.get("display_name") or ""
+
+
+def openalex_article_from_payload(payload: dict, source_name: str) -> Article:
+    doi = clean_doi(payload.get("doi"))
+    title = payload.get("title") or payload.get("display_name") or "Untitled OpenAlex record"
+    key = doi or payload.get("id") or title
+
+    return Article(
+        id=article_id("openalex", key),
+        source=source_name,
+        title=title,
+        author=openalex_authors_from_payload(payload),
+        sourceUrl=openalex_source_url(payload),
+        doi=doi,
+        year=publication_year(payload.get("publication_year") or payload.get("publication_date")),
+        journal=openalex_journal_from_payload(payload),
+        abstract=openalex_abstract_from_inverted_index(payload),
+        fullTextStatus="Not pulled",
+        selected=False,
+        reviewDecision="Unreviewed",
+    )
+
+
+async def search_openalex(
+    client: httpx.AsyncClient,
+    source_name: str,
+    search_term: str,
+) -> list[Article]:
+    query = clean_search_term(search_term)
+    if not query:
+        return []
+
+    articles = []
+    cursor = "*"
+    while cursor:
+        response = await client.get(
+            OPENALEX_WORKS_URL,
+            params={
+                "search": query,
+                "per-page": OPENALEX_PAGE_SIZE,
+                "cursor": cursor,
+            },
+        )
+        response.raise_for_status()
+        payload = response.json()
+        page = payload.get("results", [])
+        articles.extend(openalex_article_from_payload(item, source_name) for item in page)
+
+        next_cursor = (payload.get("meta") or {}).get("next_cursor")
+        if not page or not next_cursor or next_cursor == cursor:
+            break
+        cursor = next_cursor
+
+    return dedupe_articles(articles)
+
+
 async def search_literature_source(
     source_id: str,
     source_name: str,
@@ -314,6 +415,8 @@ async def search_literature_source(
                 return await search_scopus(client, source_name, search_term)
             if source_id == "scholar":
                 return await search_google_custom_search(client, source_name, search_term)
+            if source_id == "openalex":
+                return await search_openalex(client, source_name, search_term)
     except HTTPException:
         raise
     except httpx.HTTPStatusError as exc:

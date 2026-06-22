@@ -13,6 +13,22 @@ class User(ApiModel):
     department: str
 
 
+class LoginRequest(ApiModel):
+    email: str
+    password: str
+
+
+class AuthResponse(ApiModel):
+    token: str
+    user: User
+
+
+class ChangePasswordRequest(ApiModel):
+    old_password: str = Field(alias="oldPassword")
+    new_password: str = Field(alias="newPassword")
+    confirm_password: str = Field(alias="confirmPassword")
+
+
 class Collaborator(ApiModel):
     id: str
     name: str
@@ -46,7 +62,7 @@ class Article(ApiModel):
 
 
 class SearchRequest(ApiModel):
-    source_id: Literal["pubmed", "scholar", "scopus"] = Field(alias="sourceId")
+    source_id: Literal["pubmed", "scholar", "scopus", "openalex"] = Field(alias="sourceId")
     source_name: str = Field(alias="sourceName")
     search_term: str = Field(alias="searchTerm")
 
@@ -58,7 +74,7 @@ class SearchResponse(ApiModel):
 
 
 class GenerateSearchTermRequest(ApiModel):
-    source_id: Literal["pubmed", "scholar", "scopus"] = Field(alias="sourceId")
+    source_id: Literal["pubmed", "scholar", "scopus", "openalex"] = Field(alias="sourceId")
     source_name: str = Field(alias="sourceName")
     title: str
     theme: str

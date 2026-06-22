@@ -34,9 +34,9 @@ def test_project_collection_uses_frontend_contract() -> None:
     assert len(projects) == 6
     assert projects[0]["id"] == "paper-1"
     assert projects[0]["updatedAt"] == "Just now"
-    assert projects[0]["stageId"] == "review"
-    assert projects[0]["stageLabel"] == "Review"
-    assert projects[0]["stageNumber"] == 5
+    assert projects[0]["stageId"] == "search"
+    assert projects[0]["stageLabel"] == "Search"
+    assert projects[0]["stageNumber"] == 2
     assert projects[0]["status"] == "In progress"
     assert projects[0]["researchLead"] == "Dr. Joy Aifuobhokhan"
     assert projects[0]["framework"] == "PICO"
@@ -53,7 +53,7 @@ def test_project_detail() -> None:
     assert project["title"] == "School-based adolescent mental health screening models"
     assert project["researchLead"] == "Ngozi Eze"
     assert project["framework"] == "SPIDER"
-    assert len(project["articles"]) == 14
+    assert project["articles"] == []
     assert project["sources"][0]["searchTerm"]
 
 

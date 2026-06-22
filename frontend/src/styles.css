@@ -746,12 +746,12 @@ th {
 
 .pipeline-shell {
   min-height: 0;
-  width: min(100% - 60px, 1280px);
+  width: min(100% - 30px, 1440px);
   margin: 0 auto;
-  padding: 18px 0 28px;
+  padding: 9px 0 14px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 14px;
+  gap: 10px;
 }
 
 .stage-rail {
@@ -1485,7 +1485,7 @@ th {
   }
 
   .pipeline-shell {
-    width: calc(100% - 64px);
+    width: calc(100% - 32px);
   }
 
   .stage-rail {
@@ -1631,8 +1631,8 @@ th {
   }
 
   .pipeline-shell {
-    width: calc(100% - 36px);
-    padding: 12px 0 20px;
+    width: calc(100% - 18px);
+    padding: 8px 0 14px;
   }
 
   .stage-rail,

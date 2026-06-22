@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 export type StageId = "idea" | "search" | "dedupe" | "retrieval" | "review";
-export type SourceId = "pubmed" | "scholar" | "scopus";
+export type SourceId = "pubmed" | "scholar" | "scopus" | "openalex";
 export type ProjectFilter = "all" | "progress" | "complete" | "archived";
 export type ReviewDecision = "Unreviewed" | "Included" | "Maybe" | "Excluded";
 export type FullTextStatus = "Not pulled" | "Pulled";

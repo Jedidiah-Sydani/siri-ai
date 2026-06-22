@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from app.schemas import Article, Collaborator, Project, ProjectSummary, ResearchSource, User
+from app.schemas import Collaborator, Project, ProjectSummary, ResearchSource, User
 
 
 CURRENT_USER = User(
@@ -14,6 +14,7 @@ SOURCE_DEFINITIONS = (
     ("pubmed", "PubMed", True),
     ("scholar", "Google Scholar", True),
     ("scopus", "Scopus", False),
+    ("openalex", "OpenAlex", True),
 )
 
 
@@ -72,125 +73,6 @@ def make_sources(
     ]
 
 
-BASE_ARTICLES = (
-    {
-        "id": "art-1",
-        "source": "PubMed",
-        "title": "Retention factors for frontline health workers in low-resource settings",
-        "author": "Okeke A; Bello F",
-        "sourceUrl": "",
-        "doi": "10.1016/j.healthpol.2024.104920",
-        "year": "2024",
-        "journal": "Health Policy and Planning",
-        "abstract": (
-            "This study evaluates financial incentives, supervision quality, and career "
-            "development as predictors of frontline health worker retention across "
-            "low-resource settings."
-        ),
-    },
-    {
-        "id": "art-2",
-        "source": "Google Scholar",
-        "title": "Retention factors for frontline health workers in low-resource settings",
-        "author": "Okeke A; Bello F",
-        "sourceUrl": "",
-        "doi": "10.1016/j.healthpol.2024.104920",
-        "year": "2024",
-        "journal": "Health Policy and Planning",
-        "abstract": (
-            "This study evaluates financial incentives, supervision quality, and career "
-            "development as predictors of frontline health worker retention across "
-            "low-resource settings."
-        ),
-    },
-    {
-        "id": "art-3",
-        "source": "PubMed",
-        "title": "Community health worker motivation and sustained participation in Nigeria",
-        "author": "Aifuobhokhan J; Musa I",
-        "sourceUrl": "",
-        "doi": "10.1186/s12913-023-09914-2",
-        "year": "2023",
-        "journal": "BMC Health Services Research",
-        "abstract": (
-            "A qualitative assessment of community health worker motivation, stipend "
-            "reliability, workload, social recognition, and supervision in Northern Nigeria."
-        ),
-    },
-    {
-        "id": "art-4",
-        "source": "Google Scholar",
-        "title": "Non-financial incentives and community health workforce retention",
-        "author": "Bakare T; Eze N",
-        "sourceUrl": "",
-        "doi": "10.1093/heapol/czad081",
-        "year": "2023",
-        "journal": "Health Policy and Planning",
-        "abstract": (
-            "The article compares recognition, supervision, training, and peer support "
-            "models used to retain community-based health workers."
-        ),
-    },
-)
-
-
-def make_article(
-    index: int,
-    *,
-    id_suffix: str = "",
-    selected: bool = False,
-    full_text_status: str = "Not pulled",
-    review_decision: str = "Unreviewed",
-) -> Article:
-    data = deepcopy(BASE_ARTICLES[index])
-    if id_suffix:
-        data["id"] = f"{data['id']}{id_suffix}"
-    return Article(
-        **data,
-        fullTextStatus=full_text_status,
-        selected=selected,
-        reviewDecision=review_decision,
-    )
-
-
-SCREENING_ARTICLE_ROWS = (
-    ("Validation of the SDQ for adolescent mental health screening in schools", "PubMed", "Adeleke R; Mensah K", "2022", "10.1001/jamapediatrics.2022.1101", "JAMA Pediatrics"),
-    ("Validation of the SDQ for adolescent mental health screening in schools", "Google Scholar", "Adeleke R; Mensah K", "2022", "10.1001/jamapediatrics.2022.1101", "JAMA Pediatrics"),
-    ("Teacher-administered screening tools for adolescent depression", "PubMed", "Nwosu A; Okafor C", "2021", "10.1016/j.jad.2021.04.012", "Journal of Affective Disorders"),
-    ("Feasibility of school-based mental health screening in low-income settings", "Scopus", "Eze N; Bello F", "2023", "10.1186/s12888-023-04567-8", "BMC Psychiatry"),
-    ("Stepped-care models for adolescent anxiety in schools", "Google Scholar", "Yusuf Z; Obi E", "2020", "10.1192/bjp.2020.45", "British Journal of Psychiatry"),
-    ("Digital screening apps for youth mental health: a systematic review", "PubMed", "Ibrahim M; Okeke A", "2023", "10.2196/38291", "JMIR mHealth"),
-    ("Cultural adaptation of mental health screening for West African adolescents", "Scopus", "Mensah K; Eze N", "2022", "10.1371/journal.pgph.0000123", "PLOS Global Public Health"),
-    ("Parent versus self-report in adolescent depression screening", "PubMed", "Bakare T; Nwosu A", "2019", "10.1097/CHI.0000000000000345", "J. Am. Acad. Child Psychiatry"),
-    ("Feasibility of school-based mental health screening in low-income settings", "PubMed", "Eze N; Bello F", "2023", "10.1186/s12888-023-04567-8", "BMC Psychiatry"),
-    ("School counselor capacity for mental health referrals", "Google Scholar", "Obi E; Yusuf Z", "2021", "10.1080/02667363.2021.190000", "Educational Psychology in Practice"),
-    ("Universal versus targeted screening approaches in secondary schools", "PubMed", "Okafor C; Adeleke R", "2022", "10.1111/camh.12500", "Child and Adolescent Mental Health"),
-    ("Cost-effectiveness of school mental health screening programs", "Scopus", "Bello F; Musa I", "2020", "10.1007/s10488-020-01034-1", "Adm. Policy Ment. Health"),
-    ("Adolescent suicide-risk screening: ethical considerations", "PubMed", "Aifuobhokhan J; Bakare T", "2023", "10.1001/jamapsychiatry.2023.0456", "JAMA Psychiatry"),
-    ("Implementation barriers for screening in resource-limited schools", "Google Scholar", "Eze N; Okeke A", "2021", "10.1093/heapol/czab055", "Health Policy and Planning"),
-)
-
-
-def make_screening_articles() -> list[Article]:
-    return [
-        Article(
-            id=f"scr-{index + 1}",
-            title=title,
-            source=source,
-            author=author,
-            sourceUrl="",
-            year=year,
-            doi=doi,
-            journal=journal,
-            abstract="",
-            fullTextStatus="Not pulled",
-            selected=index not in (1, 8),
-            reviewDecision="Unreviewed",
-        )
-        for index, (title, source, author, year, doi, journal) in enumerate(SCREENING_ARTICLE_ROWS)
-    ]
-
-
 PROJECTS = [
     Project(
         id="paper-1",
@@ -209,16 +91,9 @@ PROJECTS = [
                 '("community health workers" AND retention AND Nigeria) OR '
                 '("frontline health workers" AND incentives AND "low-resource settings") OR '
                 '("community health workforce" AND motivation AND supervision)'
-            ),
-            result_counts={"pubmed": 2, "scholar": 2},
-            last_runs={"pubmed": "2026-06-17 09:20", "scholar": "2026-06-17 09:20"},
+            )
         ),
-        articles=[
-            make_article(0, selected=True, full_text_status="Pulled", review_decision="Included"),
-            make_article(1),
-            make_article(2, selected=True, full_text_status="Pulled"),
-            make_article(3, selected=True, full_text_status="Pulled"),
-        ],
+        articles=[],
         collaborators=make_collaborators("amara-okeke", "fatima-bello", "musa-ibrahim"),
     ),
     Project(
@@ -236,7 +111,7 @@ PROJECTS = [
         sources=make_sources(
             term='("obstetric referral" AND Nigeria) OR ("maternal health" AND referral delays)'
         ),
-        articles=[make_article(0, id_suffix="-mh"), make_article(1, id_suffix="-mh")],
+        articles=[],
         collaborators=make_collaborators("ngozi-eze", "amara-okeke"),
     ),
     Project(
@@ -274,7 +149,7 @@ PROJECTS = [
                 '("adolescent mental health" AND West Africa)'
             )
         ),
-        articles=make_screening_articles(),
+        articles=[],
         collaborators=make_collaborators("fatima-bello", "musa-ibrahim"),
     ),
     Project(
@@ -310,23 +185,7 @@ PROJECTS = [
                 '("health workforce" AND retention AND Nigeria)'
             )
         ),
-        articles=[
-            make_article(
-                0,
-                id_suffix="-complete",
-                selected=True,
-                full_text_status="Pulled",
-                review_decision="Included",
-            ),
-            make_article(1, id_suffix="-complete"),
-            make_article(
-                2,
-                id_suffix="-complete",
-                selected=True,
-                full_text_status="Pulled",
-                review_decision="Excluded",
-            ),
-        ],
+        articles=[],
     ),
 ]
 

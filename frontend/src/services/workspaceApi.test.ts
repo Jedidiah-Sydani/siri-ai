@@ -88,7 +88,7 @@ describe("loadWorkspace", () => {
       "/api/projects/paper-1",
       expect.objectContaining({ headers: { Accept: "application/json" } }),
     );
-    expect(result.sources).toHaveLength(3);
+    expect(result.sources).toHaveLength(4);
     expect(result.sources[0].searchTerm).toBe("example term");
   });
 

@@ -30,6 +30,7 @@ export const defaultSources: ResearchSource[] = [
   { id: "pubmed", name: "PubMed", enabled: true, resultCount: 0, lastRun: "", searchTerm: "" },
   { id: "scholar", name: "Google Scholar", enabled: true, resultCount: 0, lastRun: "", searchTerm: "" },
   { id: "scopus", name: "Scopus", enabled: false, resultCount: 0, lastRun: "", searchTerm: "" },
+  { id: "openalex", name: "OpenAlex", enabled: true, resultCount: 0, lastRun: "", searchTerm: "" },
 ];
 
 export const projectStatus = {
