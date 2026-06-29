@@ -114,7 +114,7 @@ class ProjectSummary(ApiModel):
     framework: str
     geography: str
     updated_at: str = Field(alias="updatedAt")
-    stage_id: Literal["idea", "search", "dedupe", "retrieval", "review"] = Field(
+    stage_id: Literal["idea", "search", "screening", "retrieval", "review"] = Field(
         alias="stageId"
     )
     stage_label: str = Field(alias="stageLabel")

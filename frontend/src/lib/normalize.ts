@@ -1,5 +1,5 @@
 import { defaultSources, isFrameworkId } from "../data/constants";
-import type { Article, Collaborator, FrameworkFields, FullTextStatus, Project, ResearchSource, ReviewDecision } from "../types";
+import type { AiScreeningRecommendation, Article, Collaborator, FrameworkFields, FullTextStatus, Project, ResearchSource, ReviewDecision } from "../types";
 
 interface RawArticle {
   id?: string;
@@ -15,6 +15,10 @@ interface RawArticle {
   fullTextStatus?: string;
   isDuplicate?: boolean;
   reviewDecision?: string;
+  aiScreening?: {
+    recommendation?: string;
+    reason?: string;
+  };
 }
 
 interface RawSource extends Partial<Omit<ResearchSource, "id">> {
@@ -59,6 +63,19 @@ function isFullTextStatus(value: unknown): value is FullTextStatus {
   return value === "Not pulled" || value === "Pulled";
 }
 
+function isAiScreeningRecommendation(value: unknown): value is AiScreeningRecommendation {
+  return value === "Likely include" || value === "Likely exclude" || value === "Unclear";
+}
+
+function normalizeAiScreening(value: RawArticle["aiScreening"]): Article["aiScreening"] {
+  if (!value || typeof value !== "object") return undefined;
+  if (!isAiScreeningRecommendation(value.recommendation)) return undefined;
+  return {
+    recommendation: value.recommendation,
+    reason: typeof value.reason === "string" ? value.reason.trim() : "",
+  };
+}
+
 function normalizeArticle(article: RawArticle): Article {
   const { isDuplicate, ...rest } = article;
   const selected = Boolean(article.selected);
@@ -70,7 +87,14 @@ function normalizeArticle(article: RawArticle): Article {
     ? article.fullTextStatus
     : "Not pulled";
 
-  return { ...DEFAULT_ARTICLE, ...rest, selected, reviewDecision, fullTextStatus };
+  return {
+    ...DEFAULT_ARTICLE,
+    ...rest,
+    selected,
+    reviewDecision,
+    fullTextStatus,
+    aiScreening: normalizeAiScreening(article.aiScreening),
+  };
 }
 
 function normalizeFrameworkFields(value: unknown): FrameworkFields {

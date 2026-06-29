@@ -1,19 +1,21 @@
 import { useMemo, useState } from "react";
-import { Filter, ListChecks, Square } from "lucide-react";
+import { Filter, ListChecks, Sparkles, Square } from "lucide-react";
 import {
   deselectArticlesById,
   filterArticles,
   markDuplicates,
+  screenArticlesWithAi,
   selectArticlesById,
   setArticleSelected,
-  type SelectionFilters,
+  type ScreeningFilters,
 } from "../../../lib/articles";
 import { getSelectedArticles } from "../../../lib/pipeline";
 import ArticleTable from "../../ArticleTable";
 import type { Article, StageProps } from "../../../types";
 
-export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
-  const [filters, setFilters] = useState<SelectionFilters>({
+export default function ScreeningStage({ paper, onUpdatePaper }: StageProps) {
+  const [screeningStatus, setScreeningStatus] = useState<"idle" | "loading">("idle");
+  const [filters, setFilters] = useState<ScreeningFilters>({
     recordType: "all",
     fullText: "any",
     yearWindow: "any",
@@ -29,7 +31,7 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
   const annotatedArticles = markDuplicates(filteredArticles);
   const filteredIds = new Set(filteredArticles.map((article) => article.id));
 
-  function applySelection(transform: (articles: Article[]) => Article[]) {
+  function applyScreeningUpdate(transform: (articles: Article[]) => Article[]) {
     onUpdatePaper((current) => ({
       ...current,
       articles: transform(current.articles),
@@ -37,14 +39,27 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
     }));
   }
 
+  function runAiScreening() {
+    if (!filteredArticles.length || screeningStatus === "loading") return;
+    setScreeningStatus("loading");
+    window.setTimeout(() => {
+      onUpdatePaper((current) => ({
+        ...current,
+        articles: screenArticlesWithAi(current, filteredIds),
+        updatedAt: "Just now",
+      }));
+      setScreeningStatus("idle");
+    }, 900);
+  }
+
   return (
     <>
-      <div className="selection-filters">
-        <div className="selection-filters-title">
+      <div className="screening-filters">
+        <div className="screening-filters-title">
           <Filter size={17} />
           <strong>Filters</strong>
         </div>
-        <div className="selection-filter-grid">
+        <div className="screening-filter-grid">
           <label>
             Duplicates
             <select
@@ -52,7 +67,7 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
               onChange={(event) =>
                 setFilters((current) => ({
                   ...current,
-                  recordType: event.target.value as SelectionFilters["recordType"],
+                  recordType: event.target.value as ScreeningFilters["recordType"],
                 }))
               }
             >
@@ -67,7 +82,7 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
               onChange={(event) =>
                 setFilters((current) => ({
                   ...current,
-                  fullText: event.target.value as SelectionFilters["fullText"],
+                  fullText: event.target.value as ScreeningFilters["fullText"],
                 }))
               }
             >
@@ -83,7 +98,7 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
               onChange={(event) =>
                 setFilters((current) => ({
                   ...current,
-                  yearWindow: event.target.value as SelectionFilters["yearWindow"],
+                  yearWindow: event.target.value as ScreeningFilters["yearWindow"],
                 }))
               }
             >
@@ -119,7 +134,7 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
         <button
           className="primary icon-button"
           type="button"
-          onClick={() => applySelection((articles) => selectArticlesById(articles, filteredIds))}
+          onClick={() => applyScreeningUpdate((articles) => selectArticlesById(articles, filteredIds))}
           disabled={!filteredArticles.length}
         >
           <ListChecks size={17} />
@@ -128,20 +143,34 @@ export default function DedupeStage({ paper, onUpdatePaper }: StageProps) {
         <button
           className="icon-button"
           type="button"
-          onClick={() => applySelection((articles) => deselectArticlesById(articles, filteredIds))}
+          onClick={() => applyScreeningUpdate((articles) => deselectArticlesById(articles, filteredIds))}
           disabled={!filteredArticles.length}
         >
           <Square size={17} />
           Deselect all
         </button>
-        <span className="selection-count">{selected} selected</span>
+        <button
+          className="secondary-action icon-button"
+          type="button"
+          onClick={runAiScreening}
+          disabled={!filteredArticles.length || screeningStatus === "loading"}
+        >
+          {screeningStatus === "loading" ? (
+            <span className="button-spinner" aria-hidden="true" />
+          ) : (
+            <Sparkles size={17} />
+          )}
+          {screeningStatus === "loading" ? "Screening..." : "AI screen articles"}
+        </button>
+        <span className="screening-count">{selected} selected</span>
       </div>
       <ArticleTable
         articles={annotatedArticles}
         selectable
+        showAiScreening
         titleHeader={`Title (${filteredArticles.length}/${total})`}
         onToggleSelect={(articleId: string, value: boolean) =>
-          applySelection((articles) => setArticleSelected(articles, articleId, value))
+          applyScreeningUpdate((articles) => setArticleSelected(articles, articleId, value))
         }
       />
     </>

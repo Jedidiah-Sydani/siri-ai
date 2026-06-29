@@ -1,10 +1,10 @@
-import type { Article } from "../types";
+import type { AiScreeningResult, Article, Project } from "../types";
 
 export type FullTextFilter = "any" | "pulled" | "notPulled";
 export type YearFilter = "any" | "1" | "5" | "10";
 export type RecordTypeFilter = "all" | "unique";
 
-export interface SelectionFilters {
+export interface ScreeningFilters {
   recordType: RecordTypeFilter;
   fullText: FullTextFilter;
   yearWindow: YearFilter;
@@ -95,9 +95,72 @@ export function setArticleSelected(
   );
 }
 
+function words(value: string): string[] {
+  return value
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((word) => word.length > 3);
+}
+
+function uniqueWords(values: string[]): string[] {
+  return Array.from(new Set(values.flatMap(words)));
+}
+
+function scoreArticleForProject(article: Article, project: Project): number {
+  const articleText = searchableArticleText(article);
+  const projectTerms = uniqueWords([
+    project.title,
+    project.theme,
+    project.geography,
+    project.researchQuestion,
+    ...Object.values(project.frameworkFields || {}),
+  ]);
+  return projectTerms.filter((term) => articleText.includes(term)).length;
+}
+
+function aiScreeningResult(article: Article, project: Project): AiScreeningResult {
+  if (article.isDuplicate) {
+    return {
+      recommendation: "Likely exclude",
+      reason: "Possible duplicate record; review the unique version first.",
+    };
+  }
+
+  const score = scoreArticleForProject(article, project);
+  if (score >= 4) {
+    return {
+      recommendation: "Likely include",
+      reason: "Title or abstract appears to match the review topic, setting, or framework fields.",
+    };
+  }
+
+  if (score <= 1) {
+    return {
+      recommendation: "Likely exclude",
+      reason: "Limited overlap with the research question and framework fields.",
+    };
+  }
+
+  return {
+    recommendation: "Unclear",
+    reason: "Some relevant terms were found, but the article needs human review.",
+  };
+}
+
+export function screenArticlesWithAi(project: Project, articleIds: Set<string>): Article[] {
+  const duplicateMap = new Map(markDuplicates(project.articles).map((article) => [article.id, article]));
+  return project.articles.map((article) => {
+    if (!articleIds.has(article.id)) return article;
+    return {
+      ...article,
+      aiScreening: aiScreeningResult(duplicateMap.get(article.id) || article, project),
+    };
+  });
+}
+
 export function filterArticles(
   articles: Article[],
-  filters: SelectionFilters,
+  filters: ScreeningFilters,
   currentYear = new Date().getFullYear(),
 ): Article[] {
   const includes = keywordList(filters.includeKeywords);

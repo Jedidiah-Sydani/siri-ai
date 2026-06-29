@@ -72,8 +72,8 @@ describe("getPaperStage", () => {
     expect(getPaperStage(makePaper({ articles: [makeArticle({ selected: false })] }))).toBe("search");
   });
 
-  it("advances to 'dedupe' once a record is selected", () => {
-    expect(getPaperStage(makePaper({ articles: [makeArticle({ selected: true })] }))).toBe("dedupe");
+  it("advances to 'screening' once a record is selected", () => {
+    expect(getPaperStage(makePaper({ articles: [makeArticle({ selected: true })] }))).toBe("screening");
   });
 
   it("advances to 'retrieval' once a selected record is pulled", () => {
@@ -172,8 +172,8 @@ describe("isStageComplete", () => {
     expect(isStageComplete(makePaper({ frameworkFields: { population: "Children" } }), "idea")).toBe(false);
   });
 
-  it("dedupe is complete once any record is selected", () => {
-    expect(isStageComplete(makePaper({ articles: [makeArticle({ selected: true })] }), "dedupe")).toBe(
+  it("screening is complete once any record is selected", () => {
+    expect(isStageComplete(makePaper({ articles: [makeArticle({ selected: true })] }), "screening")).toBe(
       true,
     );
   });

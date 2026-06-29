@@ -12,7 +12,7 @@ import type { Collaborator } from "../types";
 export const stages: StageDefinition[] = [
   { id: "idea", label: "Ideation", icon: ClipboardList },
   { id: "search", label: "Search", icon: Search },
-  { id: "dedupe", label: "Selection", icon: CopyCheck },
+  { id: "screening", label: "Screening", icon: CopyCheck },
   { id: "retrieval", label: "Retrieval", icon: Download },
   { id: "review", label: "Review", icon: ListChecks },
 ];
@@ -21,7 +21,7 @@ export const stages: StageDefinition[] = [
 export const stageHomeLabels: Record<StageId, string> = {
   idea: "Ideation",
   search: "Search",
-  dedupe: "Selection",
+  screening: "Screening",
   retrieval: "Retrieval",
   review: "Review",
 };

@@ -6,7 +6,7 @@ This service will own the application domain and data:
 - Users and project memberships
 - Research projects and workflow stages
 - Search strategies and imported articles
-- Selection, retrieval, and review decisions
+- Screening, retrieval, and review decisions
 - Comments, collaboration, and activity history
 - Calls to research sources and the existing AI orchestrator
 
@@ -26,7 +26,7 @@ idea, sources, search terms, articles, selections, and review data.
 The data currently lives in `app/seed_data.py`. This gives the frontend a real API
 boundary while database-backed create and update operations are developed.
 
-All responses currently include a three-second artificial delay so the frontend
+All responses currently include a one-second artificial delay so the frontend
 loading states remain visible during development.
 
 ## Literature Search

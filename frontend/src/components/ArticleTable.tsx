@@ -6,6 +6,7 @@ interface ArticleTableProps {
   selectable?: boolean;
   onToggleSelect?: (articleId: string, selected: boolean) => void;
   showSource?: boolean;
+  showAiScreening?: boolean;
   titleHeader?: string;
 }
 
@@ -19,6 +20,7 @@ export default function ArticleTable({
   selectable = false,
   onToggleSelect,
   showSource = true,
+  showAiScreening = false,
   titleHeader = "Title",
 }: ArticleTableProps) {
   if (!articles.length) return <EmptyState label="No records" />;
@@ -39,6 +41,7 @@ export default function ArticleTable({
       <table>
         <thead>
           <tr>
+            {showAiScreening && <th>AI screening</th>}
             <th>{titleHeader}</th>
             <th>Author</th>
             {showSource && <th>Source</th>}
@@ -57,6 +60,20 @@ export default function ArticleTable({
               key={article.id}
               className={article.isDuplicate ? "muted-row" : ""}
             >
+              {showAiScreening && (
+                <td className="ai-screening-cell">
+                  {article.aiScreening ? (
+                    <span className="ai-screening-result">
+                      <span className={`ai-screening-badge ${article.aiScreening.recommendation.toLowerCase().replaceAll(" ", "-")}`}>
+                        {article.aiScreening.recommendation}
+                      </span>
+                      <span>{article.aiScreening.reason}</span>
+                    </span>
+                  ) : (
+                    <span className="muted-text">Not screened</span>
+                  )}
+                </td>
+              )}
               <td>
                 {article.sourceUrl ? (
                   <button

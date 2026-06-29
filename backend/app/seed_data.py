@@ -227,7 +227,7 @@ def get_project_summaries() -> list[ProjectSummary]:
     stage_labels = {
         "idea": "Ideation",
         "search": "Search",
-        "dedupe": "Selection",
+        "screening": "Screening",
         "retrieval": "Retrieval",
         "review": "Review",
     }
@@ -248,7 +248,7 @@ def get_project_summaries() -> list[ProjectSummary]:
         elif any(article.full_text_status == "Pulled" for article in selected):
             stage_id = "retrieval"
         elif selected:
-            stage_id = "dedupe"
+            stage_id = "screening"
         elif project.articles or terms:
             stage_id = "search"
         else:

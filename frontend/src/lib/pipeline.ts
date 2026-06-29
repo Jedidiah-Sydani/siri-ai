@@ -50,7 +50,7 @@ export function getPaperStage(paper: Project): StageId {
   const selected = getSelectedArticles(paper);
   if (selected.some(isReviewed)) return "review";
   if (selected.some((article) => article.fullTextStatus === "Pulled")) return "retrieval";
-  if (paper.articles.some((article) => article.selected)) return "dedupe";
+  if (paper.articles.some((article) => article.selected)) return "screening";
   if (paper.articles.length || getAllSearchTerms(paper).length) return "search";
   return "idea";
 }
@@ -65,7 +65,7 @@ export function isStageComplete(paper: Project, stageId: StageId): boolean {
     );
   }
   if (stageId === "search") return paper.articles.length > 0;
-  if (stageId === "dedupe") return paper.articles.some((article) => article.selected);
+  if (stageId === "screening") return paper.articles.some((article) => article.selected);
   if (stageId === "retrieval") {
     return getSelectedArticles(paper).some((article) => article.fullTextStatus === "Pulled");
   }
