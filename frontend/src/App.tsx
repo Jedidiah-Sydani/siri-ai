@@ -4,6 +4,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import LoginPage from "./components/LoginPage";
 import { WorkspaceProvider } from "./context/WorkspaceContext";
 import HomePage from "./components/home/HomePage";
+import TranscriptionPage from "./components/transcription/TranscriptionPage";
 import WorkspacePage from "./components/workspace/WorkspacePage";
 import { clearStoredAuthToken, getStoredAuthToken } from "./services/workspaceApi";
 
@@ -20,6 +21,7 @@ export default function App() {
         <WorkspaceProvider onAuthExpired={handleAuthExpired}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/transcription" element={<TranscriptionPage />} />
             <Route path="/projects/:paperId" element={<WorkspacePage />} />
             <Route path="/projects/:paperId/:stageId" element={<WorkspacePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

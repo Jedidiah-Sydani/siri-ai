@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.schemas import Project, ProjectSummary
-from app.seed_data import get_project, get_project_summaries
 from app.services.auth import get_authenticated_user
+from app.services.data_store import get_project, get_project_summaries
 
 router = APIRouter(prefix="/projects", tags=["projects"], dependencies=[Depends(get_authenticated_user)])
 

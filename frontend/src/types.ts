@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
-export type StageId = "idea" | "search" | "dedupe" | "retrieval" | "review";
+export type StageId = "idea" | "search" | "screening" | "retrieval" | "review";
 export type SourceId = "pubmed" | "scholar" | "scopus" | "openalex";
 export type ProjectFilter = "all" | "progress" | "complete" | "archived";
 export type ReviewDecision = "Unreviewed" | "Included" | "Maybe" | "Excluded";
@@ -10,6 +10,12 @@ export type ProjectStatus = "Ideation" | "In progress" | "Complete" | "Archived"
 export type RequestStatus = "idle" | "loading" | "ready" | "error";
 export type FrameworkId = "PCC" | "PICO" | "PEO" | "SPIDER";
 export type FrameworkFields = Partial<Record<"population" | "concept" | "context" | "intervention" | "comparison" | "outcome" | "exposure" | "sample" | "phenomenon" | "design" | "evaluation" | "researchType", string>>;
+export type AiScreeningRecommendation = "Likely include" | "Likely exclude" | "Unclear";
+
+export interface AiScreeningResult {
+  recommendation: AiScreeningRecommendation;
+  reason: string;
+}
 
 export interface User {
   id: string;
@@ -51,6 +57,7 @@ export interface Article {
   selected: boolean;
   reviewDecision: ReviewDecision;
   fullTextStatus: FullTextStatus;
+  aiScreening?: AiScreeningResult;
   isDuplicate?: boolean;
 }
 
@@ -130,6 +137,23 @@ export interface GenerateSearchTermResponse {
   sourceId: SourceId;
   sourceName: string;
   searchTerm: string;
+}
+
+export type TranscriptStatus = "Ready for review" | "Processing" | "Needs cleanup";
+
+export interface TranscriptJob {
+  id: string;
+  title: string;
+  fileName: string;
+  duration: string;
+  status: TranscriptStatus;
+  updatedAt: string;
+  progress: number;
+  detectedLanguage: string;
+  transcript: string;
+  translation: string;
+  hasOriginalAudio: boolean;
+  hasCleanedAudio: boolean;
 }
 
 export interface ModalProps {

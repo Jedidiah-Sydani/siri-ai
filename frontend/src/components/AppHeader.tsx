@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import type { User } from "../types";
 
@@ -16,6 +16,14 @@ export default function AppHeader({ user, className = "", onLogout }: AppHeaderP
         <strong>SIRI</strong>
         <span>Research Workspace</span>
       </Link>
+      <nav className="app-nav" aria-label="Workspace sections">
+        <NavLink to="/" end>
+          Research
+        </NavLink>
+        <NavLink to="/transcription">
+          Transcription
+        </NavLink>
+      </nav>
       <ProfileMenu user={user} onLogout={onLogout} />
     </header>
   );

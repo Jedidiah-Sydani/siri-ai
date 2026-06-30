@@ -8,6 +8,7 @@ from app.config import load_root_env
 from app.routes.auth import router as auth_router
 from app.routes.projects import router as projects_router
 from app.routes.search import router as search_router
+from app.routes.transcriptions import router as transcriptions_router
 from app.routes.users import router as users_router
 
 load_root_env()
@@ -18,6 +19,7 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(users_router, prefix="/api")
 app.include_router(projects_router, prefix="/api")
 app.include_router(search_router, prefix="/api")
+app.include_router(transcriptions_router, prefix="/api")
 
 
 @app.middleware("http")

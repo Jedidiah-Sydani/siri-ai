@@ -123,3 +123,27 @@ class ProjectSummary(ApiModel):
     status: Literal["Ideation", "In progress", "Complete", "Archived"]
     collaborators: list[Collaborator] = []
     archived: bool = False
+
+
+class TranscriptionJob(ApiModel):
+    id: str
+    title: str
+    file_name: str = Field(alias="fileName")
+    duration: str
+    status: Literal["Ready for review", "Processing", "Needs cleanup"]
+    updated_at: str = Field(alias="updatedAt")
+    progress: int
+    detected_language: str = Field(alias="detectedLanguage")
+    transcript: str
+    translation: str
+    has_original_audio: bool = Field(alias="hasOriginalAudio")
+    has_cleaned_audio: bool = Field(alias="hasCleanedAudio")
+
+
+class TranscribeRequest(ApiModel):
+    language: str
+
+
+class TranslateRequest(ApiModel):
+    source_language: str = Field(alias="sourceLanguage")
+    target_language: str = Field(alias="targetLanguage")

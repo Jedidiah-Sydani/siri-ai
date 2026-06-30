@@ -1,0 +1,355 @@
+[
+  {
+    "id": "paper-1",
+    "title": "Community health worker-led interventions for immunization coverage",
+    "theme": "Immunization / PHC",
+    "researchLead": "Dr. Joy Aifuobhokhan",
+    "framework": "PICO",
+    "frameworkFields": {
+      "population": "Community health workers in underserved LGAs",
+      "intervention": "Financial and non-financial retention incentives",
+      "comparison": "Standard supervision or no structured incentive package",
+      "outcome": "Retention, motivation, and continuity of service"
+    },
+    "geography": "Northern Nigeria",
+    "updatedAt": "Just now",
+    "researchQuestion": "What financial and non-financial factors influence retention of trained community health workers in underserved LGAs?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": "(\"community health workers\" AND retention AND Nigeria) OR (\"frontline health workers\" AND incentives AND \"low-resource settings\") OR (\"community health workforce\" AND motivation AND supervision)"
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [
+      {
+        "id": "amara-okeke",
+        "name": "Dr. Amara Okeke",
+        "initials": "AO"
+      },
+      {
+        "id": "fatima-bello",
+        "name": "Fatima Bello",
+        "initials": "FB"
+      },
+      {
+        "id": "musa-ibrahim",
+        "name": "Musa Ibrahim",
+        "initials": "MI"
+      }
+    ],
+    "archived": false
+  },
+  {
+    "id": "paper-2",
+    "title": "Emergency obstetric referral systems and maternal outcomes",
+    "theme": "Maternal health",
+    "researchLead": "Dr. Tunde Bakare",
+    "framework": "PEO",
+    "frameworkFields": {
+      "population": "Pregnant women requiring emergency obstetric referral",
+      "exposure": "Facility and system-level referral delays",
+      "outcome": "Maternal outcomes and care continuity"
+    },
+    "geography": "Nigeria",
+    "updatedAt": "5 hours ago",
+    "researchQuestion": "What system and facility-level factors contribute to obstetric referral delays in rural LGAs?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": "(\"obstetric referral\" AND Nigeria) OR (\"maternal health\" AND referral delays)"
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [
+      {
+        "id": "ngozi-eze",
+        "name": "Ngozi Eze",
+        "initials": "NE"
+      },
+      {
+        "id": "amara-okeke",
+        "name": "Dr. Amara Okeke",
+        "initials": "AO"
+      }
+    ],
+    "archived": false
+  },
+  {
+    "id": "paper-3",
+    "title": "Seasonal malaria chemoprevention uptake among caregivers",
+    "theme": "Malaria",
+    "researchLead": "Dr. Joy Aifuobhokhan",
+    "framework": "PICO",
+    "frameworkFields": {
+      "population": "Caregivers of children eligible for SMC",
+      "intervention": "Seasonal malaria chemoprevention delivery and communication strategies",
+      "comparison": "Standard delivery approaches",
+      "outcome": "SMC uptake and adherence"
+    },
+    "geography": "Sahel region",
+    "updatedAt": "Yesterday",
+    "researchQuestion": "What caregiver, delivery, and communication factors affect SMC uptake in Sahel communities?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": "(\"seasonal malaria chemoprevention\" AND uptake) OR (\"SMC\" AND caregivers AND Sahel)"
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [],
+    "archived": false
+  },
+  {
+    "id": "paper-4",
+    "title": "School-based adolescent mental health screening models",
+    "theme": "Mental health",
+    "researchLead": "Ngozi Eze",
+    "framework": "PCC",
+    "frameworkFields": {
+      "population": "Adolescents in school settings",
+      "concept": "School-based mental health screening models",
+      "context": "West African education and health systems"
+    },
+    "geography": "West Africa",
+    "updatedAt": "3 days ago",
+    "researchQuestion": "Which school-based screening models are feasible for adolescent mental health programs in West Africa?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": "(\"school-based\" AND \"mental health screening\" AND adolescents) OR (\"adolescent mental health\" AND West Africa)"
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [
+      {
+        "id": "fatima-bello",
+        "name": "Fatima Bello",
+        "initials": "FB"
+      },
+      {
+        "id": "musa-ibrahim",
+        "name": "Musa Ibrahim",
+        "initials": "MI"
+      }
+    ],
+    "archived": false
+  },
+  {
+    "id": "paper-5",
+    "title": "Digital reporting burden among PHC facility staff",
+    "theme": "Digital health",
+    "researchLead": "SIRI Research Team",
+    "framework": "PEO",
+    "frameworkFields": {
+      "population": "PHC facility staff",
+      "exposure": "Multiple digital reporting tools",
+      "outcome": "Workload, reporting behavior, and data quality"
+    },
+    "geography": "Nigeria",
+    "updatedAt": "Last week",
+    "researchQuestion": "How does the use of multiple digital reporting tools affect PHC staff workload and data quality?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [],
+    "archived": false
+  },
+  {
+    "id": "paper-6",
+    "title": "Retention incentives for community health supervisors",
+    "theme": "Health workforce",
+    "researchLead": "Dr. Joy Aifuobhokhan",
+    "framework": "PICO",
+    "frameworkFields": {
+      "population": "Community health supervisors",
+      "intervention": "Retention incentive models",
+      "comparison": "No incentive or standard management approaches",
+      "outcome": "Sustained engagement and retention"
+    },
+    "geography": "Nigeria",
+    "updatedAt": "2 weeks ago",
+    "researchQuestion": "Which incentive models are associated with sustained engagement among community health supervisors?",
+    "sources": [
+      {
+        "id": "pubmed",
+        "name": "PubMed",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": "(\"community health supervisors\" AND incentives) OR (\"health workforce\" AND retention AND Nigeria)"
+      },
+      {
+        "id": "scholar",
+        "name": "Google Scholar",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "scopus",
+        "name": "Scopus",
+        "enabled": false,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      },
+      {
+        "id": "openalex",
+        "name": "OpenAlex",
+        "enabled": true,
+        "resultCount": 0,
+        "lastRun": "",
+        "searchTerm": ""
+      }
+    ],
+    "articles": [],
+    "collaborators": [],
+    "archived": false
+  }
+]

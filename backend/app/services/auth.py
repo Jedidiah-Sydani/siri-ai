@@ -8,7 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.config import load_root_env
 from app.schemas import User
-from app.seed_data import CURRENT_USER
+from app.services.data_store import get_current_user
 
 
 DEFAULT_EMAIL = "admin@gmail.com"
@@ -57,7 +57,7 @@ def get_authenticated_user(
             detail="Invalid or expired session.",
         )
 
-    return CURRENT_USER.model_copy(deep=True)
+    return get_current_user()
 
 
 def change_password(old_password: str, new_password: str, confirm_password: str) -> None:

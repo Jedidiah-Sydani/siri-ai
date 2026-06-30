@@ -1,0 +1,44 @@
+[
+  {
+    "id": "audio-1",
+    "title": "Niger Audio SHEO",
+    "fileName": "Niger Audio SHEO.m4a",
+    "duration": "28:10",
+    "status": "Ready for review",
+    "updatedAt": "Just now",
+    "progress": 82,
+    "detectedLanguage": "English + Hausa",
+    "transcript": "Interviewer: Can you describe what usually affects retention after training?\n\nParticipant: The main issue is not only salary. Supervisors, workload, transport, and whether the facility has the tools we need all affect motivation.",
+    "translation": "Interviewer: Can you describe what usually affects retention after training?\n\nParticipant: The main issue is not only salary. Supervisors, workload, transport, and whether the facility has the tools we need all affect motivation.",
+    "originalPath": "docs/audio samples/Niger Audio SHEO.m4a",
+    "cleanedPath": null
+  },
+  {
+    "id": "audio-2",
+    "title": "CSOs LSN LRN ENG",
+    "fileName": "CSOs LSN LRN ENG.mp3",
+    "duration": "14:51",
+    "status": "Processing",
+    "updatedAt": "24 minutes ago",
+    "progress": 54,
+    "detectedLanguage": "Hausa",
+    "transcript": "Speaker 1: We heard the announcement at the facility.\n\nSpeaker 2: Some mothers were not available on the day the medicine was shared.",
+    "translation": "Speaker 1: We heard the announcement at the facility.\n\nSpeaker 2: Some mothers were not available on the day the medicine was shared.",
+    "originalPath": "docs/audio samples/CSOs LSN LRN ENG.mp3",
+    "cleanedPath": null
+  },
+  {
+    "id": "audio-3",
+    "title": "IDI - referral transport coordinator",
+    "fileName": "referral-transport-coordinator.m4a",
+    "duration": "31:46",
+    "status": "Needs cleanup",
+    "updatedAt": "Yesterday",
+    "progress": 68,
+    "detectedLanguage": "English",
+    "transcript": "Participant: The ambulance is sometimes available, but communication between the primary facility and referral hospital can delay movement.",
+    "translation": "Participant: The ambulance is sometimes available, but communication between the primary facility and referral hospital can delay movement.",
+    "originalPath": null,
+    "cleanedPath": null
+  }
+]

@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from app.config import ROOT_DIR
 from app.main import app
 from app.schemas import Article
 
@@ -157,6 +158,81 @@ def test_generate_search_term_route(monkeypatch) -> None:
         "sourceName": "PubMed",
         "searchTerm": '("malaria chemoprevention" OR SMC) AND uptake AND Nigeria',
     }
+
+
+def test_transcription_workflow_uses_backend_storage(tmp_path, monkeypatch) -> None:
+    from app.services import transcriptions
+
+    storage_dir = tmp_path / "transcriptions"
+    monkeypatch.setattr(transcriptions, "STORAGE_DIR", storage_dir)
+    monkeypatch.setattr(transcriptions, "METADATA_PATH", storage_dir / "records.json")
+
+    upload_response = client.post(
+        "/api/transcriptions",
+        headers=auth_headers(),
+        data={"title": "Interview one"},
+        files={"file": ("interview.mp3", b"fake audio", "audio/mpeg")},
+    )
+
+    assert upload_response.status_code == 200
+    job = upload_response.json()
+    assert job["title"] == "Interview one"
+    assert job["fileName"] == "interview.mp3"
+    assert job["hasOriginalAudio"] is True
+    assert job["hasCleanedAudio"] is False
+
+    clean_response = client.post(f"/api/transcriptions/{job['id']}/clean", headers=auth_headers())
+    assert clean_response.status_code == 200
+    assert clean_response.json()["hasCleanedAudio"] is True
+
+    transcribe_response = client.post(
+        f"/api/transcriptions/{job['id']}/transcribe",
+        headers=auth_headers(),
+        json={"language": "auto"},
+    )
+    assert transcribe_response.status_code == 200
+    assert transcribe_response.json()["detectedLanguage"] == "English + Hausa"
+    assert transcribe_response.json()["transcript"]
+
+    translate_response = client.post(
+        f"/api/transcriptions/{job['id']}/translate",
+        headers=auth_headers(),
+        json={"sourceLanguage": "English + Hausa", "targetLanguage": "english"},
+    )
+    assert translate_response.status_code == 200
+    assert translate_response.json()["translation"].startswith("[English + Hausa to English translation]")
+
+    audio_response = client.get(
+        f"/api/transcriptions/{job['id']}/audio/original",
+        headers=auth_headers(),
+    )
+    assert audio_response.status_code == 200
+    assert audio_response.content == b"fake audio"
+
+
+def test_seed_transcriptions_reference_sample_audio(tmp_path, monkeypatch) -> None:
+    from app.services import transcriptions
+
+    storage_dir = tmp_path / "transcriptions"
+    storage_dir.mkdir()
+    metadata_path = storage_dir / "records.json"
+    metadata_path.write_text(
+        (ROOT_DIR / "storage" / "transcriptions" / "records.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(transcriptions, "STORAGE_DIR", storage_dir)
+    monkeypatch.setattr(transcriptions, "METADATA_PATH", metadata_path)
+
+    response = client.get("/api/transcriptions", headers=auth_headers())
+
+    assert response.status_code == 200
+    recordings = response.json()
+    assert recordings[0]["fileName"] == "Niger Audio SHEO.m4a"
+    assert recordings[0]["duration"] == "28:10"
+    assert recordings[0]["hasOriginalAudio"] is True
+    assert recordings[1]["fileName"] == "CSOs LSN LRN ENG.mp3"
+    assert recordings[1]["duration"] == "14:51"
+    assert recordings[1]["hasOriginalAudio"] is True
 
 
 def test_protected_routes_require_login() -> None:
